@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Menu Example</title>
+    <style>
+        .popup_menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+            z-index: 1000;
+        }
+        .popup_option {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .popup_option:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+<select name="player" id="player" class="dynamically_added">
+	<option value="">Select Player</option>
+	<option id="option_1" value="10">Parent Player</option>
+	<option id="option_2" value="1161">Child First Child Last</option>
+	<option id="option_3" value="1781">Child2 First Child2 Last</option>
+</select>
+<script>
+//alert(value);
+var element = document.querySelector("#option_1");
+element.style.display = 'none';
+</script>
+
+<div class="events_page_grid_element">
+    <span class="event_menu" onclick="menu_btn_click(1)">...</span>
+	text text text text text text text text text text text 
+</div>
+
+<div class="events_page_grid_element">
+    <span class="event_menu" onclick="menu_btn_click(2)">...</span>
+	text text text text text text text text text text text 
+</div>
+
+<div id="popup_menu" class="popup_menu">
+    <div class="popup_option" onclick="duplicate_event()">Duplicate</div>
+    <div class="popup_option" onclick="archive_event()">Archive</div>
+</div>
+
+<script>
+    document.addEventListener('click', function(event) {
+        const popupMenu = document.getElementById('popup_menu');
+
+        if (event.target.classList.contains('event_menu')) {
+            const postID = event.target.getAttribute('onclick').match(/\d+/)[0];
+            showPopupMenu(event, postID);
+        } else if (!popupMenu.contains(event.target)) {
+            popupMenu.style.display = 'none';
+        }
+    });
+
+    function showPopupMenu(event, postID) {
+        const popupMenu = document.getElementById('popup_menu');
+        popupMenu.style.left = `${event.pageX}px`;
+        popupMenu.style.top = `${event.pageY}px`;
+        popupMenu.style.display = 'block';
+        popupMenu.dataset.postId = postID;
+    }
+
+    function duplicate_event() {
+        const popupMenu = document.getElementById('popup_menu');
+        const postID = popupMenu.dataset.postId;
+        alert(`Duplicate event with ID: ${postID}`);
+        popupMenu.style.display = 'none';
+    }
+
+    function archive_event() {
+        const popupMenu = document.getElementById('popup_menu');
+        const postID = popupMenu.dataset.postId;
+        alert(`Archive event with ID: ${postID}`);
+        popupMenu.style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
