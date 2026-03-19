@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Picker</title>
+    <style>
+        .time-picker-dropdown {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .time-picker-dropdown div {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .time-picker-dropdown div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="timeInput1" placeholder="Select Time">
+    <input type="text" id="timeInput2" placeholder="Select Time">
+
+    <script>
+        class TimePicker {
+            constructor(inputId) {
+                this.inputElement = document.getElementById(inputId);
+                this.createTimePicker();
+                this.attachEvents();
+            }
+
+            createTimePicker() {
+                this.dropdown = document.createElement('div');
+                this.dropdown.className = 'time-picker-dropdown';
+                document.body.appendChild(this.dropdown);
+
+                const times = this.generateTimeOptions();
+                times.forEach(time => {
+                    const timeOption = document.createElement('div');
+                    timeOption.innerText = time;
+                    this.dropdown.appendChild(timeOption);
+                    timeOption.addEventListener('click', () => {
+						console.log('timeOption.click');
+                        this.inputElement.value = time;
+                        this.hideDropdown();
+                    });
+                });
+            }
+
+            generateTimeOptions() {
+                const times = [];
+                const periods = ['AM', 'PM'];
+
+                for (let i = 0; i < 24; i++) {
+                    const period = periods[Math.floor(i / 12)];
+                    const hour = i % 12 === 0 ? 12 : i % 12;
+                    times.push(`${hour}:00 ${period}`);
+                    times.push(`${hour}:30 ${period}`);
+                }
+
+                return times;
+            }
+
+            attachEvents() {
+                this.inputElement.addEventListener('focus', () => {
+					console.log('focus');
+                    this.showDropdown();
+                });
+
+                this.inputElement.addEventListener('blur', () => {
+					console.log('blur');
+                    setTimeout(() => this.hideDropdown(), 100);
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!this.inputElement.contains(e.target) && !this.dropdown.contains(e.target)) {
+						console.log('click');
+                        this.hideDropdown();
+                    }
+                });
+            }
+
+            showDropdown() {
+                const rect = this.inputElement.getBoundingClientRect();
+                this.dropdown.style.left = `${rect.left}px`;
+                this.dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+                this.dropdown.style.width = `${rect.width}px`;
+                this.dropdown.style.display = 'block';
+            }
+
+            hideDropdown() {
+				console.log('hideDropdown');
+                this.dropdown.style.display = 'none';
+            }
+        }
+
+        // Attach the Time Picker to inputs
+        new TimePicker('timeInput1');
+        new TimePicker('timeInput2');
+    </script>
+</body>
+</html>

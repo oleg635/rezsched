@@ -1,0 +1,34 @@
+<style>
+.waiting {
+    position: relative;
+    display: inline-block;
+}
+
+.waiting::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;  /* Adjust the size */
+    height: 20px;
+    margin-left: -10px; /* Center the spinner horizontally */
+    margin-top: -10px;  /* Center the spinner vertically */
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    border-top-color: #000;  /* Spinner color */
+    animation: spin 1s ease infinite; /* Rotating animation */
+    visibility: visible;
+    opacity: 1;
+    display: block; /* Ensure it's visible */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>
+<button class="waiting">Submit</button>
